@@ -1,6 +1,6 @@
 # Logseq-LogArxivMate
 
-![](icon.svg)
+<img src="icon.svg" alt="drawing" width="200"/>
 
 Logseq-LogArxivMate is a powerful plugin for Logseq that allows you to extract and organize information from an arXiv link. With a simple command, you can fetch paper details and create a dedicated page with this information. The plugin also provides customization options for the page template to fit your needs.
 
@@ -10,7 +10,8 @@ Logseq-LogArxivMate is a powerful plugin for Logseq that allows you to extract a
 - Create a new page in Logseq with the extracted information.
 - Customizable page template through plugin settings.
 
-![](./assets/demo.mp4)
+
+<img src="./assets/demo.gif" alt="drawing" width="800"/>
 
 
 ## Usage
