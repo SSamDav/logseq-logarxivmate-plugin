@@ -9,23 +9,18 @@ Authors:: {{#each authors}}[[{{this}}]]{{#unless @last}}, {{/unless}}{{/each}}
 
 function isValidArxivUrl (url) {
     // Define the regular expressions for the two valid formats
-    const absPattern = /^https:\/\/arxiv\.org\/abs\/[a-zA-Z0-9.]+$/;
-    const pdfPattern = /^https:\/\/arxiv\.org\/pdf\/[a-zA-Z0-9.]+\.pdf$/;
+    const absPattern = /^https:\/\/(www\.)?arxiv\.org\/abs\/[a-zA-Z0-9.]+$/;
+    const pdfPattern = /^https:\/\/(www\.)?arxiv\.org\/pdf\/[a-zA-Z0-9.]+\.pdf$/;
     // Test the URL against the regular expressions
     return absPattern.test(url) || pdfPattern.test(url);
 }
 
 async function extractPaperMetadata (url) {
     // Check if the URL starts with the expected prefix for abs URLs
-    const absPrefix = 'https://arxiv.org/abs/';
-    const pdfPrefix = 'https://arxiv.org/pdf/';
-
-    
-    const absUrl = url.replace(".pdf", "").replace(pdfPrefix, absPrefix)
-    const pdfUrl = url.replace(".pdf", "").replace(absPrefix, pdfPrefix) + ".pdf"
-    const paperId = absUrl.substring(absPrefix.length);
-
-    // Extract paper metadata
+    const absUrl = url.replace(".pdf", "").replace("/pdf/", "/abs/");
+    const pdfUrl = url.replace(".pdf", "").replace("/abs/", "/pdf/") + ".pdf";
+    const parts =  absUrl.split('/');
+    const paperId = parts[parts.length - 1];
     const apiUrl = `https://export.arxiv.org/api/query?id_list=${paperId}`;
     try {
         const response = await fetch(apiUrl);
@@ -127,7 +122,6 @@ async function main () {
       'Get Arxiv Paper',
       async () => {
         const { content, uuid } = await logseq.Editor.getCurrentBlock();
-        
         if (!isValidArxivUrl(content.trim())) {
             logseq.UI.showMsg(`
                 Link not supported!
