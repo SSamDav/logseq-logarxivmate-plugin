@@ -17,11 +17,10 @@ function isValidArxivUrl (url) {
 
 async function extractPaperMetadata (url) {
     // Check if the URL starts with the expected prefix for abs URLs
-    const absUrl = url.replace(".pdf", "").replace("/pdf/", "/abs/")
-    const pdfUrl = url.replace(".pdf", "").replace("/abs/", "/pdf/") + ".pdf"
-    const paperId = absUrl.substring(absPrefix.length);
-
-    // Extract paper metadata
+    const absUrl = url.replace(".pdf", "").replace("/pdf/", "/abs/");
+    const pdfUrl = url.replace(".pdf", "").replace("/abs/", "/pdf/") + ".pdf";
+    const parts =  absUrl.split('/');
+    const paperId = parts[parts.length - 1];
     const apiUrl = `https://export.arxiv.org/api/query?id_list=${paperId}`;
     try {
         const response = await fetch(apiUrl);
@@ -123,7 +122,6 @@ async function main () {
       'Get Arxiv Paper',
       async () => {
         const { content, uuid } = await logseq.Editor.getCurrentBlock();
-        
         if (!isValidArxivUrl(content.trim())) {
             logseq.UI.showMsg(`
                 Link not supported!
